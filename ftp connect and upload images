@@ -1,0 +1,54 @@
+
+<form action="" enctype="multipart/form-data" method="post">
+<input name="file" type="file" />
+<input name="submit" type="submit" value="Upload File" />
+</form>
+
+<?php
+
+$host = "files.000webhost.com";
+$user = "mdfile";
+$port = "21";
+$password = "Developer@88";
+$domain = "mdfile.000webhostapp.com";
+
+$destination_file = "/public_html/upload";
+
+	$conn_id = ftp_connect($host);
+	ftp_pasv($conn_id, true); 
+
+	// login with username and password
+	$login_result = ftp_login($conn_id, $user, $password); 
+
+	// check connection
+	if ((!$conn_id) || (!$login_result)) { 
+		echo "FTP connection has failed!";
+		echo "Attempted to connect to $host for user $user"; 
+		exit; 
+	} else {
+		echo "Connected to $host, for user $user";
+	}
+	
+	
+	if(isset($_POST['submit'])){
+		$source_file = $_FILES['file']['tmp_name']; // this is working 
+		
+		$destination_file =  $destination_file = "https://mdfile.000webhostapp.com/upload/2.png"; // here put image with name it seem checking condition
+		
+		$name = "/public_html/upload/".$_FILES['file']['name'];
+		//upload the file
+		$upload = ftp_put($conn_id, $name, $source_file, FTP_ASCII); 
+
+		// check upload status
+		if (!$upload) { 
+		echo "FTP upload has failed!";
+		} else {
+		//echo "Uploaded $source_file to $host as $destination_file";
+			echo"Uploaded successfully";
+		}
+		
+	}
+// close the FTP stream 
+ftp_close($conn_id);
+
+?>
